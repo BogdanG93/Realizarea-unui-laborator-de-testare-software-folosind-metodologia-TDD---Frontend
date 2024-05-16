@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, queryByPlaceholderText, render } from "@testing-library/react";
+import { fireEvent, render, waitForElementToBeRemoved } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { PaginaInregistrareUtilizator } from "./PaginaInregistrareUtilizator";
 
@@ -65,6 +65,16 @@ describe("PaginaInregistrareUtilizator", () =>{
                     value: continut
                 }
             };
+        };
+
+        const mockAsyncIntarziat = () => {
+            return jest.fn().mockImplementation(() => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve({});
+                    }, 300);
+                });
+            });
         };
         
         let buton, campNumeAfisat, campNumeUtilizator, campParola, campParolaRepetata;
@@ -143,5 +153,58 @@ describe("PaginaInregistrareUtilizator", () =>{
             }
             expect(actiuni.postInregistrare).toHaveBeenCalledWith(obiectUtilizatorAsteptat);
         });
+        
+        it("8. Butonul de înregistrare este inactiv cât timp există un apel API în desfășurare.", () => {
+            const actiuni = {
+                postInregistrare: mockAsyncIntarziat()
+            };
+            setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            fireEvent.click(buton);
+            expect(actiuni.postInregistrare).toHaveBeenCalledTimes(1);
+        });
+
+        it("9. Afișează spinner cât timp există un apel API în desfășurare.", () => {
+            const actiuni = {
+                postInregistrare: mockAsyncIntarziat()
+            };
+            const { queryByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const spinner = queryByText('Loading...');
+            expect(spinner).toBeInTheDocument();
+        });
+        
+        it("10. Ascunde spinner după ce apelul API se termină cu succes.", async () => {
+            const actiuni = {
+                postInregistrare: mockAsyncIntarziat()
+            };
+            const { queryByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const spinner = queryByText('Loading...');
+            await waitForElementToBeRemoved(spinner);
+            expect(spinner).not.toBeInTheDocument();
+        });
+          
+        it("11. Ascunde spinner după ce apelul API se termină cu o eroare.", async () => {
+            const actiuni = {
+                postInregistrare: jest.fn().mockImplementation(() => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            reject({
+                                response: {data: {}}
+                            });
+                        }, 300);
+                    });
+                })
+            };
+            const { queryByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const spinner = queryByText('Loading...');
+            await waitForElementToBeRemoved(spinner);
+            expect(spinner).not.toBeInTheDocument();
+        });
+
     });
 });
+
+console.error = () => {};

@@ -6,7 +6,8 @@ export class PaginaInregistrareUtilizator extends React.Component {
         numeAfisare: "",
         numeUtilizator: "",
         parola: "",
-        repetareParola: ""
+        repetareParola: "",
+        apelApiInAsteptare: false
     };
 
     laSchimbareNumeAfisare = (event) => {
@@ -35,7 +36,13 @@ export class PaginaInregistrareUtilizator extends React.Component {
             numeUtilizator: this.state.numeUtilizator,
             parola: this.state.parola
         }
-        this.props.actiuni.postInregistrare(utilizator);
+        this.setState({apelApiInAsteptare: true});
+        this.props.actiuni.postInregistrare(utilizator).then(raspuns => {
+            this.setState({apelApiInAsteptare: false});
+        })
+        .catch((eroare) => {
+            this.setState({apelApiInAsteptare: false});
+        })
     }
 
 
@@ -82,7 +89,18 @@ export class PaginaInregistrareUtilizator extends React.Component {
                     />
                 </div>
                 <div className="text-center">
-                    <button className="btn btn-primary" onClick={this.laApasareaButonuluiInregistrare}> Inregistrare </button>
+                    <button 
+                    className="btn btn-primary" 
+                    onClick={this.laApasareaButonuluiInregistrare} 
+                    disabled={this.state.apelApiInAsteptare}
+                    >
+                    {this.state.apelApiInAsteptare && (
+                        <div className="spinner-border text-light spinner-border-sm mr-sm-1" role="status">
+                        <span className="sr-only">Loading...</span>
+                        </div>
+                    )}
+                    Inregistrare 
+                    </button>
                 </div>
             </div>
         )
