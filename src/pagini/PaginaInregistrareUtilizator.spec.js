@@ -1,6 +1,5 @@
 import React from "react";
-import { fireEvent, render, waitForElementToBeRemoved } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import { fireEvent, render, waitForElementToBeRemoved, findByText } from "@testing-library/react";
 import { PaginaInregistrareUtilizator } from "./PaginaInregistrareUtilizator";
 
 describe("PaginaInregistrareUtilizator", () =>{
@@ -15,44 +14,44 @@ describe("PaginaInregistrareUtilizator", () =>{
 
         it("2. Are câmp pentru introducerea numelui de afișat.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campNumeAfisat = queryByPlaceholderText("Numele care va fi afisat");
-            expect(campNumeAfisat).toBeInTheDocument();
+            const numeAfisareInput = queryByPlaceholderText("Numele care va fi afisat");
+            expect(numeAfisareInput).toBeInTheDocument();
         });
 
         it("3. Are câmp pentru introducerea numelui de utilizator.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campNumeUtilizator = queryByPlaceholderText("Numele utilizatorului");
-            expect(campNumeUtilizator).toBeInTheDocument();
+            const numeUtilizator = queryByPlaceholderText("Numele utilizatorului");
+            expect(numeUtilizator).toBeInTheDocument();
         });
         
         it("4. Are câmp pentru introducerea parolei.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campParola = queryByPlaceholderText("Parola aleasa");
-            expect(campParola).toBeInTheDocument();
+            const parolaInput = queryByPlaceholderText("Parola aleasa");
+            expect(parolaInput).toBeInTheDocument();
         });
          
         it("5. Are câmp de tip parolă pentru introducerea parolei.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campParola = queryByPlaceholderText("Parola aleasa");
-            expect(campParola.type).toBe("password");
+            const parolaInput = queryByPlaceholderText("Parola aleasa");
+            expect(parolaInput.type).toBe("password");
         });
 
         it("6. Are câmp pentru repetarea parolei.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campParolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
-            expect(campParolaRepetata).toBeInTheDocument();
+            const parolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
+            expect(parolaRepetata).toBeInTheDocument();
         });
 
         it("7. Are câmp de tip parolă pentru repetarea parolei.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campParolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
-            expect(campParolaRepetata.type).toBe("password");
+            const parolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
+            expect(parolaRepetata.type).toBe("password");
         });
 
         it("8. Are buton de înregistrare.", () => {
             const { container } = render(<PaginaInregistrareUtilizator />);
-            const butonInregistrare = container.querySelector("button");
-            expect(butonInregistrare).toBeInTheDocument();
+            const buton = container.querySelector("button");
+            expect(buton).toBeInTheDocument();
         });
 
     });
@@ -77,22 +76,22 @@ describe("PaginaInregistrareUtilizator", () =>{
             });
         };
         
-        let buton, campNumeAfisat, campNumeUtilizator, campParola, campParolaRepetata;
+        let buton, numeAfisareInput, numeUtilizatorInput, parolaInput, parolaRepetata;
 
         const setarePentruInregistrare = (props) => {
             const redat = render(
                 <PaginaInregistrareUtilizator {...props} />
             );
             const { container, queryByPlaceholderText } = redat;
-            campNumeAfisat = queryByPlaceholderText("Numele care va fi afisat");
-            campNumeUtilizator = queryByPlaceholderText("Numele utilizatorului");
-            campParola = queryByPlaceholderText("Parola aleasa");
-            campParolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
+            numeAfisareInput = queryByPlaceholderText("Numele care va fi afisat");
+            numeUtilizatorInput = queryByPlaceholderText("Numele utilizatorului");
+            parolaInput = queryByPlaceholderText("Parola aleasa");
+            parolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
 
-            fireEvent.change(campNumeAfisat, modifica("nume-afisat"));
-            fireEvent.change(campNumeUtilizator, modifica("nume-utilizator"));
-            fireEvent.change(campParola, modifica("Parola01"));
-            fireEvent.change(campParolaRepetata, modifica("Parola01"));
+            fireEvent.change(numeAfisareInput, modifica("nume-afisat"));
+            fireEvent.change(numeUtilizatorInput, modifica("nume-utilizator"));
+            fireEvent.change(parolaInput, modifica("Parola01"));
+            fireEvent.change(parolaRepetata, modifica("Parola01"));
 
             buton = container.querySelector("button");
             return redat;
@@ -100,30 +99,30 @@ describe("PaginaInregistrareUtilizator", () =>{
 
         it("1. Setează valoarea numelui de afișare în stare.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campNumeAfisat = queryByPlaceholderText("Numele care va fi afisat");
-            fireEvent.change(campNumeAfisat, modifica("nume-afisat"));
-            expect(campNumeAfisat).toHaveValue("nume-afisat");
+            const numeAfisareInput = queryByPlaceholderText("Numele care va fi afisat");
+            fireEvent.change(numeAfisareInput, modifica("nume-afisat"));
+            expect(numeAfisareInput).toHaveValue("nume-afisat");
         });
         
         it("2. Setează valoarea numelui de utilizator în stare.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campNumeUtilizator = queryByPlaceholderText("Numele utilizatorului");
-            fireEvent.change(campNumeUtilizator, modifica("nume-utilizator"));
-            expect(campNumeUtilizator).toHaveValue("nume-utilizator");
+            const numeUtilizatorInput = queryByPlaceholderText("Numele utilizatorului");
+            fireEvent.change(numeUtilizatorInput, modifica("nume-utilizator"));
+            expect(numeUtilizatorInput).toHaveValue("nume-utilizator");
         });
 
         it("3. Setează valoarea parolei în stare.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campParola = queryByPlaceholderText("Parola aleasa");
-            fireEvent.change(campParola, modifica("Parola01"));
-            expect(campParola).toHaveValue("Parola01");
+            const parolaInput = queryByPlaceholderText("Parola aleasa");
+            fireEvent.change(parolaInput, modifica("Parola01"));
+            expect(parolaInput).toHaveValue("Parola01");
         });
         
         it("4. Setează valoarea parolei repetată în stare.", () => {
             const { queryByPlaceholderText } = render(<PaginaInregistrareUtilizator />);
-            const campParolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
-            fireEvent.change(campParolaRepetata, modifica("Parola01"));
-            expect(campParolaRepetata).toHaveValue("Parola01");
+            const parolaRepetata = queryByPlaceholderText("Repeta parola aleasa");
+            fireEvent.change(parolaRepetata, modifica("Parola01"));
+            expect(parolaRepetata).toHaveValue("Parola01");
         });
 
         it("5. Apelează postInregistrare când câmpurile sunt valide și acțiunile sunt furnizate în proprietăți.", () => {
@@ -170,7 +169,7 @@ describe("PaginaInregistrareUtilizator", () =>{
             };
             const { queryByText } = setarePentruInregistrare({actiuni});
             fireEvent.click(buton);
-            const spinner = queryByText('Loading...');
+            const spinner = queryByText("Loading...");
             expect(spinner).toBeInTheDocument();
         });
         
@@ -180,7 +179,7 @@ describe("PaginaInregistrareUtilizator", () =>{
             };
             const { queryByText } = setarePentruInregistrare({actiuni});
             fireEvent.click(buton);
-            const spinner = queryByText('Loading...');
+            const spinner = queryByText("Loading...");
             await waitForElementToBeRemoved(spinner);
             expect(spinner).not.toBeInTheDocument();
         });
@@ -199,11 +198,117 @@ describe("PaginaInregistrareUtilizator", () =>{
             };
             const { queryByText } = setarePentruInregistrare({actiuni});
             fireEvent.click(buton);
-            const spinner = queryByText('Loading...');
+            const spinner = queryByText("Loading...");
             await waitForElementToBeRemoved(spinner);
             expect(spinner).not.toBeInTheDocument();
         });
 
+        
+        it("12. Afișează eroarea de validare pentru numele utilizatorului atunci când primește eroare pentru acest câmp.", async () => {
+            const actiuni = {
+                postInregistrare: jest.fn().mockRejectedValue({
+                    response: {
+                        data: {
+                            eroriValidare: {
+                                numeAfisare: "Nu poate fi null",
+                            },
+                        },
+                    },
+                }),
+            };
+            const { findByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const mesajEroare = await findByText("Nu poate fi null");
+            expect(mesajEroare).toBeInTheDocument();
+        });
+
+        it("13. Activează butonul de înregistrare atunci când câmpurile pentru parolă și repetă parola au aceeași valoare.", () => {
+            setarePentruInregistrare();
+            expect(buton).not.toBeDisabled();
+        });
+        
+        it("14. Dezactivează butonul de înregistrare dacă valoarea din câmpul de repetare a parolei diferă de cea din câmpul pentru parolă.", () => {
+            setarePentruInregistrare();
+            fireEvent.change(parolaRepetata, modifica("parola-noua"));
+            expect(buton).toBeDisabled();
+        });
+        
+        it("15. Dezactivează butonul de înregistrare dacă valoarea din câmpul parolă diferă de cea din câmpul pentru de repetare a parolei.", () => {
+            setarePentruInregistrare();
+            fireEvent.change(parolaInput, modifica("parola-noua"));
+            expect(buton).toBeDisabled();
+        });
+
+        it("16. Afișează stilul de tip eroare pentru câmpul de repetare a parolei dacă valoarea acestuia diferă de cea din câmpul pentru parolă.", () => {
+            const {queryByText} = setarePentruInregistrare();
+            fireEvent.change(parolaRepetata, modifica("parola-noua"));
+            const avertismentDiscrepanta = queryByText("Parolele nu corespund");
+            expect(avertismentDiscrepanta).toBeInTheDocument();
+        });
+        
+        it("17. Afișează stilul de tip eroare pentru câmpul parolă dacă valoarea acestuia diferă de cea din câmpul pentru repetarea parolei.", () => {
+            const {queryByText} = setarePentruInregistrare();
+            fireEvent.change(parolaInput, modifica("parola-noua"));
+            const avertismentDiscrepanta = queryByText("Parolele nu corespund");
+            expect(avertismentDiscrepanta).toBeInTheDocument();
+        });
+
+        it("18. Ascunde eroarea de validare pentru numele afișat atunci când se schimbă valoarea pentru acest câmp.", async () => {
+            const actiuni = {
+                postInregistrare: jest.fn().mockRejectedValue({
+                    response: {
+                        data: {
+                            eroriValidare: {
+                                numeAfisare: "Nu poate fi null",
+                            },
+                        },
+                    },
+                }),
+            };
+            const { findByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const mesajEroare = await findByText("Nu poate fi null");
+            fireEvent.change(numeAfisareInput, modifica("nume afisare schimbat"));
+            expect(mesajEroare).not.toBeInTheDocument();
+        });
+
+        it("19. Ascunde eroarea de validare pentru numele utilizatorului atunci când se schimbă valoarea pentru acest câmp.", async () => {
+            const actiuni = {
+                postInregistrare: jest.fn().mockRejectedValue({
+                    response: {
+                        data: {
+                            eroriValidare: {
+                                numeUtilizator: "Numele utilizatorului nu poate fi null",
+                            },
+                        },
+                    },
+                }),
+            };
+            const { findByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const mesajEroare = await findByText("Numele utilizatorului nu poate fi null");
+            fireEvent.change(numeUtilizatorInput, modifica("nume utilizator schimbat"));
+            expect(mesajEroare).not.toBeInTheDocument();
+        });
+
+        it("20. Ascunde eroarea de validare pentru parolă atunci când se schimbă valoarea pentru acest câmp.", async () => {
+            const actiuni = {
+                postInregistrare: jest.fn().mockRejectedValue({
+                    response: {
+                        data: {
+                            eroriValidare: {
+                                parola: "Nu poate fi null",
+                            },
+                        },
+                    },
+                }),
+            };
+            const { findByText } = setarePentruInregistrare({actiuni});
+            fireEvent.click(buton);
+            const mesajEroare = await findByText("Nu poate fi null");
+            fireEvent.change(parolaInput, modifica("parola schimbata"));
+            expect(mesajEroare).not.toBeInTheDocument();
+        });
     });
 });
 
